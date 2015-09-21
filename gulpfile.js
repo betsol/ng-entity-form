@@ -70,7 +70,7 @@ gulp.task('build:templates', function () {
   var headerContent = fs.readFileSync('src/templates/header.html', 'utf8');
   return gulp
     .src([
-      './src/templates/form.html'
+      './src/templates/entity-form.html'
     ])
     .pipe(header(headerContent, { pkg : pkg } ))
     .pipe(gulp.dest('dist/templates'))
@@ -81,7 +81,7 @@ gulp.task('build:templates', function () {
       removeRedundantAttributes: true,
       caseSensitive: true
     }))
-    .pipe(rename('form.min.html'))
+    .pipe(rename('entity-form.min.html'))
     .pipe(header(headerContent, { pkg : pkg } ))
     .pipe(gulp.dest('dist/templates'))
     .on('error', gutil.log)
