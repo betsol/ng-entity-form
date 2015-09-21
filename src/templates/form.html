@@ -1,0 +1,68 @@
+<h1 ng-if="'update' == mode">Редактирование записи</h1>
+<h1 ng-if="'create' == mode">Создание записи</h1>
+
+<hr>
+
+<form name="form" role="form" class="col-lg-6">
+
+    <fieldset ng-repeat="fieldset in formScheme">
+
+        <hr ng-if="!$first">
+
+        <h2 ng-if="fieldset.title">{~ fieldset.title ~}</h2>
+
+        <div class="form-group" ng-repeat="(fieldName, field) in fieldset.fields">
+            <label for="field-{~ fieldName ~}">{~ field.title ~}</label>
+            <input
+                ng-if="'input' == field.elementType"
+                id="field-{~ fieldName ~}"
+                name="{~ fieldName ~}"
+                class="form-control"
+                type="{~ field.inputType ~}"
+                ng-model="entity[fieldName]"
+                ng-required="field.required"
+                autofocus
+                ng-disabled="processing"
+                ng-readonly="field.readonly"
+            >
+        </div>
+
+    </fieldset>
+
+    <hr>
+
+    <button
+        type="button"
+        class="btn btn-default"
+        ng-click="cancel()"
+        ng-disabled="processing"
+    >
+        <span class="fa fa-chevron-left"></span>
+        Назад
+    </button>
+
+    <div class="btn-group pull-right">
+
+        <button
+            type="button"
+            class="btn btn-default"
+            ng-click="reset()"
+            ng-disabled="processing"
+        >
+            <span class="fa fa-times"></span>
+            Сбросить
+        </button>
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+            ng-click="save(form)"
+            ng-disabled="processing"
+        >
+            <span class="fa fa-save"></span>
+            Сохранить
+        </button>
+
+    </div>
+
+</form>

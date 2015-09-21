@@ -1,0 +1,33 @@
+{
+  "name": "betsol-ng-entity-form",
+  "description": "Automatic entity forms for Angular.js",
+  "version": "0.0.0",
+  "main": "dist/betsol-ng-entity-form.js",
+  "ignore": [
+    "src",
+    "test",
+    ".*",
+    "gulpfile.js",
+    "karma.conf.js",
+    "package.json"
+  ],
+  "devDependencies": {
+    "angular": "~1",
+    "angular-mocks": "~1.4.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/betsol/ng-entity-form.git"
+  },
+  "keywords": [
+    "angular",
+    "angular.js",
+    "form",
+    "forms",
+    "entity",
+    "entities",
+    "view",
+    "generator",
+    "validation"
+  ]
+}
