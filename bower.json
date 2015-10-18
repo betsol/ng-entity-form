@@ -11,6 +11,9 @@
     "karma.conf.js",
     "package.json"
   ],
+  "dependencies": {
+    "angular-bootstrap-datetimepicker": "~0.3.15"
+  },
   "devDependencies": {
     "angular": "~1",
     "angular-mocks": "~1.4.6"
@@ -29,5 +32,8 @@
     "view",
     "generator",
     "validation"
-  ]
+  ],
+  "resolutions": {
+    "angular": "~1"
+  }
 }

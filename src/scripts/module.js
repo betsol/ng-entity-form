@@ -24,14 +24,29 @@
   // ANGULAR MODULES //
   //=================//
 
-  angular.module('betsol.entityForm', [])
+  angular.module('betsol.entityForm', [
+    'ui.bootstrap.datetimepicker'
+  ])
 
-    .factory('EntityForm', function ($rootScope, $injector) {
+    .factory('EntityForm', function ($rootScope, $injector, $parse) {
 
       var successStrategy = new RedirectStrategy('success');
       var cancelStrategy = new RedirectStrategy('cancel');
 
       return function (config) {
+
+        // Handling config.
+        var defaultConfig = {
+          scope: null,
+          repository: null,
+          entity: null,
+          mode: null,
+          scheme: null,
+          successStrategy: null,
+          cancelStrategy: null,
+          redirectState: null
+        };
+        config = angular.extend({}, defaultConfig, config);
 
         if (!config.scope) {
           return console.log('Missing scope');
@@ -104,6 +119,17 @@
           });
         };
 
+        $scope.entityPath = function (string) {
+          var getter = $parse(string);
+          var setter = getter.assign;
+          return function (newValue) {
+            if (newValue) {
+              setter($scope, newValue);
+            }
+            return getter($scope);
+          };
+        };
+
       }
 
     })
@@ -127,7 +153,12 @@
   function scopeEntityFromEntity (formScheme, entity) {
     var result = {};
     iterateFields(formScheme, function (fieldName) {
-      result[fieldName] = (entity[fieldName] || null);
+      var value = eval('entity.' + fieldName);
+      // Casting moments to vanilla dates.
+      //if (moment.isMoment(value)) {
+      //  value = value.toDate();
+      //}
+      propertyPathSet(result, fieldName, value);
     });
     return result;
   }
@@ -171,11 +202,24 @@
       switch (field.type) {
         case 'string':
         case 'url':
+        case 'boolean':
+        case 'email':
+        case 'phoneNumber':
           field.elementType = 'input';
+          break;
+        case 'datetime':
+        case 'date':
+          field.elementType = field.type;
       }
       switch (field.type) {
         case 'string':
           field.inputType = 'text';
+          break;
+        case 'boolean':
+          field.inputType = 'checkbox';
+          break;
+        case 'phoneNumber':
+          field.inputType = 'tel';
           break;
         default:
           field.inputType = field.type;
@@ -253,6 +297,23 @@
       }
 
     }
+  }
+
+  function propertyPathSet (object, path, value) {
+    var parts = path.split('.');
+    var reference = object;
+    var i = 0;
+    var imax = parts.length - 1;
+    angular.forEach(parts, function (part) {
+      reference[part] = reference[part] || {};
+      if (i == imax) {
+        reference[part] = value;
+      } else {
+        reference = reference[part];
+      }
+      i++;
+    });
+    reference = value;
   }
 
 })(window, angular);

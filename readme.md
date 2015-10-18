@@ -20,6 +20,10 @@ Convenient re-usable controller for entity forms that makes your code very DRY a
 - Actions on "after save" and on "cancel" are customizable
 
 
+## Dependencies
+
+
+
 ## Installation
 
 ### Install library with Bower
