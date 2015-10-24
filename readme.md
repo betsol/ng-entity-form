@@ -22,7 +22,8 @@ Convenient re-usable controller for entity forms that makes your code very DRY a
 
 ## Dependencies
 
-
+- [UI Bootstrap](https://angular-ui.github.io/bootstrap/)
+- [Bootstrap-UI/datetime-picker](https://github.com/Gillardo/bootstrap-ui-datetime-picker)
 
 ## Installation
 

@@ -6,6 +6,9 @@ module.exports = function (config) {
       // Third-party dependencies
       'bower_components/angular/angular.js',
       'bower_components/angular-mocks/angular-mocks.js',
+      'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+      'bower_components/bootstrap-ui-datetime-picker/dist/datetime-picker.js',
+      'bower_components/bootstrap-ui-datetime-picker/dist/datetime-picker.tpls.js',
 
       // Module files
       'dist/scripts/betsol-ng-entity-form.js',

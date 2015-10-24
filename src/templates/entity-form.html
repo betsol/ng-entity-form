@@ -11,45 +11,68 @@
 
         <h2 ng-if="fieldset.title">{~ fieldset.title ~}</h2>
 
-        <div class="form-group" ng-repeat="(fieldName, field) in fieldset.fields" ng-switch="field.type">
+        <div class="form-group" ng-repeat="(fieldName, field) in fieldset.fields" ng-switch="field.type" ng-if="!field.hidden">
 
+            <!-- Generic Input -->
             <div ng-switch-default>
                 <label for="field-{~ fieldName ~}">{~ field.title ~}</label>
-                <input
-                    ng-if="'input' == field.elementType"
-                    id="field-{~ fieldName ~}"
-                    name="{~ fieldName ~}"
-                    class="form-control"
-                    type="{~ field.inputType ~}"
-                    ng-model="entityPath('entity.' + fieldName)"
-                    ng-model-options="{ getterSetter: true }"
-                    ng-required="field.required"
-                    ng-disabled="processing"
-                    ng-readonly="field.readonly"
-                >
-            </div>
-
-            <div class="dropdown" ng-switch-when="datetime">
-                <a class="dropdown-toggle my-toggle-select" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="">
-                    <div class="input-append">
-                        <input
-                            type="text"
-                            class="input-large"
-                            data-ng-model="entityPath('entity.' + fieldName)"
-                            ng-model-options="{ getterSetter: true }"
-                        >
-                        <span class="add-on"><i class="icon-calendar"></i></span>
-                    </div>
-                </a>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                    <datetimepicker
-                        data-ng-model="entityPath('entity.' + fieldName)"
+                <div ng-class="{'input-group': field.addonBefore || field.addonAfter}">
+                    <span class="input-group-addon" ng-if="field.addonBefore">
+                        <span ng-switch="field.addonBefore.type">
+                            <span ng-switch-when="image">
+                                <img ng-src="{~ getInputAddonImage(entity, field.addonBefore.url) ~}">
+                            </span>
+                        </span>
+                    </span>
+                    <input
+                        ng-if="'input' == field.elementType"
+                        id="field-{~ fieldName ~}"
+                        name="{~ fieldName ~}"
+                        class="form-control"
+                        type="{~ field.inputType ~}"
+                        ng-model="entityPath('entity.' + fieldName)"
                         ng-model-options="{ getterSetter: true }"
-                        data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select' }"
-                    ></datetimepicker>
-                </ul>
+                        ng-required="field.required"
+                        ng-disabled="processing"
+                        ng-readonly="field.readonly"
+                        ng-attr-min="{~ field.constraints.min ~}"
+                        ng-attr-max="{~ field.constraints.max ~}"
+                    >
+                </div>
             </div>
 
+            <!-- Date and Time -->
+            <div class="dropdown" ng-switch-when="datetime">
+                <label for="field-{~ fieldName ~}">{~ field.title ~}</label>
+                <p class="input-group">
+                    <input
+                        id="field-{~ fieldName ~}"
+                        name="{~ fieldName ~}"
+                        class="form-control"
+                        type="text"
+                        ng-model="entityPath('entity.' + fieldName)"
+                        ng-model-options="{ getterSetter: true }"
+                        datetime-picker="dd.MM.yyyy HH:mm:ss"
+                        timepicker-options="{showMeridian: false}"
+                        is-open="openedDateTimePickers[fieldName]"
+                        date-time-model
+                        ng-required="field.required"
+                        ng-disabled="processing"
+                        ng-readonly="field.readonly"
+                    >
+                    <span class="input-group-btn">
+                        <button
+                            type="button"
+                            class="btn btn-default"
+                            ng-click="openedDateTimePickers[fieldName] = true"
+                            ng-disabled="field.readonly || processing"
+                        ><i class="fa fa-calendar"></i></button>
+                    </span>
+                </p>
+
+            </div>
+
+            <!-- Checkbox -->
             <div class="dropdown checkbox" ng-switch-when="boolean">
                 <label>
                   <input

@@ -49,7 +49,7 @@ gulp.task('build:scripts', function () {
   var headerContent = fs.readFileSync('src/scripts/header.js', 'utf8');
   return gulp
     .src([
-      './src/scripts/module.js'
+      'src/scripts/module.js'
     ])
     .pipe(concat('betsol-ng-entity-form.js'))
     .pipe(ngAnnotate({

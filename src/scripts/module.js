@@ -25,6 +25,7 @@
   //=================//
 
   angular.module('betsol.entityForm', [
+    'ui.bootstrap',
     'ui.bootstrap.datetimepicker'
   ])
 
@@ -123,15 +124,46 @@
           var getter = $parse(string);
           var setter = getter.assign;
           return function (newValue) {
-            if (newValue) {
+            if ('undefined' !== typeof newValue) {
               setter($scope, newValue);
             }
             return getter($scope);
           };
         };
 
+        $scope.getInputAddonImage = function (entity, url) {
+          if ('function' === typeof url) {
+            return url(entity);
+          } else {
+            return url;
+          }
+        }
+
       }
 
+    })
+
+    .directive('dateTimeModel', function () {
+      return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function (scope, element, attrs, ngModel) {
+          ngModel.$formatters.push(function (value) {
+            if (moment.isMoment(value)) {
+              return value.toDate();
+            } else {
+              return value;
+            }
+          });
+          ngModel.$parsers.push(function (value) {
+            if (value instanceof Date) {
+              return moment(value);
+            } else {
+              return value;
+            }
+          });
+        }
+      }
     })
 
   ;
@@ -205,6 +237,7 @@
         case 'boolean':
         case 'email':
         case 'phoneNumber':
+        case 'number':
           field.elementType = 'input';
           break;
         case 'datetime':
