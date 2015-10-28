@@ -1,5 +1,13 @@
 # betsol-ng-entity-form changelog
 
+## Version 0.0.3
+(28 Oct 2015)
+
+- Entity is now passed directly to form's scope
+- Fixed form saving
+- Added field types for enum and text 
+
+
 ## Version 0.0.2
 (25 Oct 2015)
 

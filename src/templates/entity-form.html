@@ -87,6 +87,40 @@
                 </label>
             </div>
 
+            <!-- Dropdown -->
+            <div ng-switch-when="enum">
+                <label for="field-{~ fieldName ~}">{~ field.title ~}</label>
+                <select
+                    id="field-{~ fieldName ~}"
+                    name="{~ fieldName ~}"
+                    class="form-control"
+                    ng-model="entityPath('entity.' + fieldName)"
+                    ng-model-options="{ getterSetter: true }"
+                    ng-required="field.required"
+                    ng-disabled="processing"
+                    ng-readonly="field.readonly"
+                    ng-options="{~ field.selectExpression + ' in field.options' ~}"
+                >
+                    <option value="">—</option>
+                </select>
+            </div>
+
+            <!-- Text -->
+            <div ng-switch-when="text">
+                <label for="field-{~ fieldName ~}">{~ field.title ~}</label>
+                <textarea
+                    id="field-{~ fieldName ~}"
+                    name="{~ fieldName ~}"
+                    class="form-control"
+                    ng-model="entityPath('entity.' + fieldName)"
+                    ng-model-options="{ getterSetter: true }"
+                    ng-required="field.required"
+                    ng-disabled="processing"
+                    ng-readonly="field.readonly"
+                    rows="{~ field.rowsCount ~}"
+                ></textarea>
+            </div>
+
         </div>
 
     </fieldset>

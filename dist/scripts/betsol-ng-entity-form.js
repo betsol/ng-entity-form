@@ -1,6 +1,6 @@
 /**
  * betsol-ng-entity-form - Automatic entity forms for Angular.js
- * @version v0.0.1
+ * @version v0.0.3
  * @link https://github.com/betsol/ng-entity-form
  * @license MIT
  *
@@ -85,7 +85,7 @@
 
         $scope.processing = false;
         $scope.mode = mode;
-        $scope.entity = scopeEntityFromEntity(formScheme, entity);
+        $scope.entity = scopeEntityFromEntity(entity);
         $scope.formScheme = formScheme;
 
         $scope.save = function (form) {
@@ -118,7 +118,7 @@
         };
 
         $scope.reset = function () {
-          $scope.entity = scopeEntityFromEntity(formScheme, entity);
+          $scope.entity = scopeEntityFromEntity(entity);
         };
 
         $scope.cancel = function () {
@@ -145,7 +145,7 @@
           } else {
             return url;
           }
-        }
+        };
 
       }
 
@@ -185,22 +185,12 @@
    * Returns entity to be used inside of scope,
    * based on entity received from the repository.
    *
-   * @param {object} formScheme
    * @param {object} entity
    *
    * @returns {object}
    */
-  function scopeEntityFromEntity (formScheme, entity) {
-    var result = {};
-    iterateFields(formScheme, function (fieldName) {
-      var value = eval('entity.' + fieldName);
-      // Casting moments to vanilla dates.
-      //if (moment.isMoment(value)) {
-      //  value = value.toDate();
-      //}
-      propertyPathSet(result, fieldName, value);
-    });
-    return result;
+  function scopeEntityFromEntity (entity) {
+    return angular.extend({}, entity);
   }
 
   /**
@@ -215,8 +205,8 @@
   function getDataToSave (formScheme, scopeEntity) {
     var result = {};
     iterateFields(formScheme, function (fieldName, field) {
-      if (scopeEntity[fieldName] && !field.readonly) {
-        result[fieldName] = (scopeEntity[fieldName]);
+      if (!field.readonly && !field.hidden) {
+        propertyPathSet(result, fieldName, propertyPathGet(scopeEntity, fieldName));
       }
     });
     return result;
@@ -251,6 +241,17 @@
         case 'datetime':
         case 'date':
           field.elementType = field.type;
+          break;
+        case 'enum':
+          if (!field.selectExpression) {
+            field.selectExpression = 'key as value for (key, value)';
+          }
+          break;
+        case 'text':
+          if (!field.rowsCount) {
+            field.rowsCount = 10;
+          }
+          break;
       }
       switch (field.type) {
         case 'string':
@@ -273,7 +274,7 @@
    * Iterates specified form scheme fields and
    * executes a specified callback function for each field.
    *
-   * @param {array} formScheme
+   * @param {object} formScheme
    * @param {function} cb
    */
   function iterateFields (formScheme, cb) {
@@ -340,6 +341,13 @@
     }
   }
 
+  /**
+   * Sets object property value by it's path.
+   *
+   * @param {Object} object
+   * @param {string} path
+   * @param {*} value
+   */
   function propertyPathSet (object, path, value) {
     var parts = path.split('.');
     var reference = object;
@@ -355,6 +363,18 @@
       i++;
     });
     reference = value;
+  }
+
+  /**
+   * Returns property value from object by it's path.
+   *
+   * @param {Object} object
+   * @param {string} path
+   *
+   * @returns {Object}
+   */
+  function propertyPathGet (object, path) {
+    return eval('object.' + path);
   }
 
 })(window, angular);
