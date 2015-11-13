@@ -139,6 +139,10 @@
           }
         };
 
+        $scope.getReadonly = function (entity, fieldName, field) {
+          return getPropertyValue(field.readonly, entity);
+        };
+
       }
 
     })
@@ -197,7 +201,7 @@
   function getDataToSave (formScheme, scopeEntity) {
     var result = {};
     iterateFields(formScheme, function (fieldName, field) {
-      if (!field.readonly && !field.hidden) {
+      if (!getPropertyValue(field.readonly, scopeEntity) && !field.hidden) {
         propertyPathSet(result, fieldName, propertyPathGet(scopeEntity, fieldName));
       }
     });
@@ -368,5 +372,20 @@
   function propertyPathGet (object, path) {
     return eval('object.' + path);
   }
+
+  /**
+   * @param {*} property
+   * @param {Object} entity
+   *
+   * @returns {*}
+   */
+  function getPropertyValue (property, entity) {
+    if ('function' === typeof property) {
+      return property(entity);
+    } else {
+      return property;
+    }
+  }
+
 
 })(window, angular);
