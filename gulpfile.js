@@ -31,8 +31,8 @@ var htmlmin = require('gulp-htmlmin');
 // CLEAN //
 //=======//
 
-gulp.task('clean', function (callback) {
-  del(['dist'], callback);
+gulp.task('clean', function () {
+  return del('dist');
 });
 
 
@@ -106,5 +106,5 @@ gulp.task('test', function (done) {
 //==============//
 
 gulp.task('default', function (done) {
-  runSequence('build', 'test', done);
+  runSequence('build', done);
 });

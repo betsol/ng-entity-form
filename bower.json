@@ -1,7 +1,7 @@
 {
   "name": "betsol-ng-entity-form",
   "description": "Automatic entity forms for Angular.js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "dist/betsol-ng-entity-form.js",
   "ignore": [
     "src",

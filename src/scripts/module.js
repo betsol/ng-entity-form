@@ -290,7 +290,8 @@
    * @constructor
    */
   function RedirectStrategy (mode) {
-    return function (config, $injector) {
+
+    var redirectStrategyFunction  = function (config, $injector) {
 
       // Trying to redirect to the previous URL first.
       if ($injector.has('previousUrl')) {
@@ -334,7 +335,12 @@
         }
       }
 
-    }
+    };
+
+    redirectStrategyFunction.$inject = ['config', '$injector'];
+
+    return redirectStrategyFunction;
+
   }
 
   /**

@@ -1,6 +1,6 @@
 /**
  * betsol-ng-entity-form - Automatic entity forms for Angular.js
- * @version v0.0.3
+ * @version v0.0.4
  * @link https://github.com/betsol/ng-entity-form
  * @license MIT
  *
@@ -298,7 +298,8 @@
    * @constructor
    */
   function RedirectStrategy (mode) {
-    return function (config, $injector) {
+
+    var redirectStrategyFunction  = function (config, $injector) {
 
       // Trying to redirect to the previous URL first.
       if ($injector.has('previousUrl')) {
@@ -342,7 +343,12 @@
         }
       }
 
-    }
+    };
+
+    redirectStrategyFunction.$inject = ['config', '$injector'];
+
+    return redirectStrategyFunction;
+
   }
 
   /**
